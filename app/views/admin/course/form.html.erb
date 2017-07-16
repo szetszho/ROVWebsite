@@ -1,0 +1,81 @@
+<% sessions_number = @record && @record.sessions.count || 0 %>
+<%= content_tag(:ul) { @record.errors.full_messages.map { |x| content_tag(:li, x) }.join.html_safe } if @record %>
+<%= form_tag do %>
+    <%= label_tag('course[name]', 'Name') %>
+    <%= text_field_tag('course[name]', @record.try(:name), required: true) %>
+    <br>
+    <%= label_tag('course[code]', 'Code') %>
+    <%= text_field_tag('course[code]', @record.try(:code), required: true) %>
+    <br>
+    <%= label_tag('course[description]', 'Description') %>
+    <%= text_area_tag('course[description]', @record.try(:description)) %>
+    <br>
+    <%= label_tag('course[required_department_ids]', 'Required Department') %>
+    <%= select_tag('course[required_department_ids]', options_from_collection_for_select(Department.all, :id, :short_name, @record.try(:required_department_ids)), multiple: true) %>
+    <br>
+    <%= label_tag('course[sessions][0][start_time]', 'Sessions') %>
+    <table id="course_sessions" border="1">
+      <tr>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>
+          <%= button_tag('Insert', id: 'course_sessions_insert') %>
+        </th>
+      </tr>
+      <% @record && @record.sessions.each.with_index do |session, index| %>
+          <tr id="course_sessions_<%= index %>">
+            <td>
+              <%= text_field_tag("course[sessions][#{index}][start_time]", session.start_time, id: "course_sessions_#{index}_start_time") %>
+            </td>
+            <td>
+              <%= text_field_tag("course[sessions][#{index}][end_time]", session.end_time, id: "course_sessions_#{index}_end_time") %>
+            </td>
+            <td>
+              <%= button_tag('Delete', id: "course_sessions_#{index}_delete") %>
+            </td>
+          </tr>
+      <% end %>
+      <tr id="course_sessions_%">
+        <td>
+          <%= text_field_tag('course[sessions][%][start_time]', nil, id: 'course_sessions_%_start_time') %>
+        </td>
+        <td>
+          <%= text_field_tag('course[sessions][%][end_time]', nil, id: 'course_sessions_%_end_time') %>
+        </td>
+        <td>
+          <%= button_tag('Delete', id: 'course_sessions_%_delete') %>
+        </td>
+      </tr>
+    </table>
+    <br>
+    <%= submit_tag('Submit') %>
+<% end %>
+
+<%= javascript_include_tag('jquery3.min.js') %>
+
+<script>
+  const $course_sessions_template = jQuery('#course_sessions_\\%');
+  const course_sessions_template = $course_sessions_template[0].outerHTML;
+  $course_sessions_template.remove();
+  var sessions_number = <%= sessions_number %>;
+  function delete_course_session (event) {
+    event.preventDefault();
+    jQuery(this).closest('tr').remove();
+    if (jQuery('#course_sessions').find('tr').length == 1)
+      insert_course_session(++sessions_number);
+  }
+  function insert_course_session(index) {
+    jQuery('#course_sessions').append(jQuery(course_sessions_template.replace(/%/g, index)));
+    jQuery('#course_sessions_' + index + '_delete').click(delete_course_session);
+  }
+  insert_course_session(sessions_number);
+  jQuery(function () {
+    for (var t = 0; t <= sessions_number; t++) {
+      jQuery('#course_sessions_' + t + '_delete').click(delete_course_session);
+    }
+    jQuery('#course_sessions_insert').click(function (e) {
+      e.preventDefault();
+      insert_course_session(++sessions_number);
+    });
+  });
+</script>

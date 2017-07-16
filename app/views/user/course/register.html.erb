@@ -1,0 +1,61 @@
+<% if params[:course] && params[:session] %>
+    Register this session?
+    <table>
+      <tr>
+        <th>Course Code</th>
+        <td><%= @data[:course].code %></td>
+      </tr>
+      <tr>
+        <th>Course Name</th>
+        <td><%= @data[:course].name %></td>
+      </tr>
+      <tr>
+        <th>Start Time</th>
+        <td><%= @data[:session].start_time %></td>
+      </tr>
+      <tr>
+        <th>End Time</th>
+        <td><%= @data[:session].end_time %></td>
+      </tr>
+    </table>
+    <%= form_tag do
+      submit_tag('Yes') <<
+          link_to(button_tag('No'), course_register1_path)
+    end %>
+    <%= link_to('Back', index_path) %>
+<% elsif params[:course] %>
+    Course :
+    <table>
+      <tr>
+        <th>Code</th>
+        <td><%= @data[:course].code %></td>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <td><%= @data[:course].name %></td>
+      </tr>
+      <tr>
+        <th>Description</th>
+        <td><%= simple_format(@data[:course].description) %></td>
+      </tr>
+    </table>
+    Session :
+    <%= tableize(@data[:sessions],
+                 start_time:   nil,
+                 end_time:     nil,
+                 participants: :participants_count,
+                 action:       ->(datum, _) { link_to('Register', course_register3_path(@data[:course].id, datum.id)) }
+        ) %>
+    <%= link_to('Back', index_path) %>
+<% else %>
+    <% boolean = ->(datum, field) { datum.public_send(field) ? '*' : '' } %>
+    Course :
+    <%= tableize(@data[:courses],
+                 code:       nil,
+                 name:       nil,
+                 required:   boolean,
+                 registered: boolean,
+                 action:     ->(datum, _) { link_to('Register', course_register2_path(datum.id)) }
+        ) %>
+    <%= link_to('Back', index_path) %>
+<% end %>

@@ -1,0 +1,7 @@
+Delete this record?
+<br>
+<%= details_of(@record) %>
+<%= form_tag do
+  submit_tag('Yes') <<
+      link_to(button_tag('No'), '/admin/index')
+end %>

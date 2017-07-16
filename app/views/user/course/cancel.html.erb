@@ -1,0 +1,26 @@
+<% registered_session = @participation.registered_session
+   course = registered_session.course %>
+Cancel this session?
+<table>
+  <tr>
+    <th>Course Code</th>
+    <td><%= course.code %></td>
+  </tr>
+  <tr>
+    <th>Course Name</th>
+    <td><%= course.name %></td>
+  </tr>
+  <tr>
+    <th>Start Time</th>
+    <td><%= registered_session.start_time %></td>
+  </tr>
+  <tr>
+    <th>End Time</th>
+    <td><%= registered_session.end_time %></td>
+  </tr>
+</table>
+<%= form_tag do
+  submit_tag('Yes') <<
+      link_to(button_tag('No'), registered_sessions_path)
+end %>
+<%= link_to('Back', index_path) %>

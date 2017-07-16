@@ -1,0 +1,44 @@
+Departments :
+<%= tableize(@data[:departments],
+             id:         nil,
+             short_name: nil,
+             full_name:  nil,
+             members:    [:members, :size],
+             actions:    ->(datum, _) do
+               link_to('Update', update_department_path(datum.id)) << ' ' <<
+                   link_to('Delete', delete_department_path(datum.id))
+             end) %>
+<%= link_to('Insert', insert_department_path) %>
+<br>
+<br>
+Courses :
+<%= tableize(@data[:courses],
+             id:          nil,
+             code:        nil,
+             name:        nil,
+             description: nil,
+             sessions:    [:sessions, :size],
+             actions:     ->(datum, _) do
+               link_to('Details', course_details_path(datum.id)) << ' ' <<
+                   link_to('Update', update_course_path(datum.id)) << ' ' <<
+                   link_to('Delete', delete_course_path(datum.id))
+             end) %>
+<%= link_to('Insert', insert_course_path) %>
+<br>
+<br>
+Members :
+<%= tableize(@data[:members],
+             id:                  nil,
+             student_id:          nil,
+             name:                nil,
+             department:          [:department, :to_s],
+             phone:               nil,
+             registered_sessions: [:registered_sessions, :size],
+             actions:             ->(datum, _) do
+               link_to('Update', update_member_path(datum.id)) << ' ' <<
+                   link_to('Delete', delete_member_path(datum.id))
+             end) %>
+<%= link_to('Insert', insert_member_path) %>
+<br>
+<br>
+<%= link_to('Log Out', '/admin/logout') %>

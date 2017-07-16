@@ -1,0 +1,8 @@
+<%= tableize(@current_user.registered_sessions,
+             course_code: [:course, :code],
+             course_name: [:course, :name],
+             start_time:  nil,
+             end_time:    nil,
+             action:      ->(datum, _) { link_to('Cancel', course_cancel_path(datum.id)) }
+    ) %>
+<%= link_to('Back', index_path) %>

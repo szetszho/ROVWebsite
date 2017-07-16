@@ -1,0 +1,17 @@
+<table>
+  <tr>
+    <th>Name</th>
+    <td><%= @current_user.name %></td>
+  </tr>
+  <tr>
+    <th>Student ID</th>
+    <td><%= @current_user.student_id %></td>
+  </tr>
+  <tr>
+    <th>Department</th>
+    <td><%= @current_user.department || 'N/A' %></td>
+  </tr>
+</table>
+
+<%= link_to('Register Course', course_register1_path) %>
+<%= link_to('My Course', registered_sessions_path) %>

@@ -1,0 +1,10 @@
+<%= details_of(@record.course) %>
+<%= details_of(@record) %>
+Participants :
+<%= tableize(@record.participants,
+             id:         nil,
+             student_id: nil,
+             name:       nil,
+             department: nil,
+             phone:      nil,
+    ) %>

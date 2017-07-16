@@ -1,0 +1,16 @@
+<%= content_tag(:ul) { @record.errors.full_messages.map { |x| content_tag(:li, x) }.join.html_safe } if @record %>
+<%= form_tag do %>
+    <%= label_tag('department[short_name]', 'Short Name') %>
+    <%= text_field_tag('department[short_name]', @record.try(:short_name), required: true) %>
+    <br>
+    <%= label_tag('department[full_name]', 'Full Name') %>
+    <%= text_field_tag('department[full_name]', @record.try(:full_name), required: true) %>
+    <br>
+    <%= label_tag('department[require_course_ids]', 'Require Courses') %>
+    <%= select_tag('department[require_course_ids]', options_from_collection_for_select(Course.all, :id, :to_s, @record.try(:require_course_ids)), multiple: true) %>
+    <br>
+    <%= label_tag('department[member_ids]', 'Members') %>
+    <%= select_tag('department[member_ids]', options_from_collection_for_select(Member.all, :id, :to_s, @record.try(:member_ids)), multiple: true) %>
+    <br>
+    <%= submit_tag('Submit') %>
+<% end %>

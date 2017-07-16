@@ -1,0 +1,11 @@
+<%= details_of(@record) %>
+Sessions :
+<%= tableize(@record.sessions,
+             id:           nil,
+             start_time:   nil,
+             end_time:     nil,
+             participants: [:participants, :size],
+             actions:      ->(datum, _) { link_to('Details', session_details_path(datum.id)) }
+    ) %>
+<%= link_to('Update', update_course_path(@record.id)) %>
+<%= link_to('Delete', delete_course_path(@record.id)) %>
